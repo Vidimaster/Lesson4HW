@@ -31,12 +31,8 @@ public class Calculator {
     }
 
     public <T> AbstractList<T> bin(List<T> list) {
-        Double result = 1.0;
         String resultstr = "";
-
         ArrayList<T> res = new ArrayList<>();
-
-
         for (T number : list) {
             String[] parts = number.toString().split("\\.");
             Stack<Integer> st = new Stack<>();
