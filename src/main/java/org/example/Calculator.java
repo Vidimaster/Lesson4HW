@@ -14,6 +14,7 @@ public class Calculator {
         }
         return result;
     }
+
     public double mul(List<? extends Number> list) {
         double result = 1;
         for (Number number : list) {
@@ -21,6 +22,7 @@ public class Calculator {
         }
         return result;
     }
+
     public double div(List<? extends Number> list) {
         double result = list.get(0).doubleValue();
         list.remove(0);
@@ -35,48 +37,58 @@ public class Calculator {
 
         ArrayList<T> res = new ArrayList<>();
         for (T number : list) {
-            String[] parts = number.toString().split("\\.");
-            Stack<Integer> st = new Stack<>();
-            int num = Integer.parseInt(parts[0]);
-            int count = 0;
-            boolean fl = true;
-            Double num2 = 0.0;
+            try {
+                String[] parts = number.toString().split("\\.");
+                Stack<Integer> st = new Stack<>();
 
-            while (num > 0) {
-                st.push(num % 2);
-                num = num / 2;
-            }
+                int num = Integer.parseInt(parts[0]);
+                int count = 0;
+                boolean fl = true;
+                Double num2 = 0.0;
 
-            while (!(st.isEmpty())) {
-                resultstr += st.pop().toString();
-            }
-            if (parts.length == 2) {
-                resultstr += "00101110";
-
-                String str = "0." + parts[1];
-                num2 = Double.valueOf(str);
-                String[] strbin = num2.toString().split("\\.");
-                while (fl) {
-
-                    num2 = num2 * 2;
-                    strbin = num2.toString().split("\\.");
-                    st.push(Integer.parseInt(strbin[0]));
-                    str = "0." + strbin[1];
-                    num2 = Double.valueOf(str);
-                    count++;
-                    if (strbin[1] == "0" || count < 10) {
-                        fl = false;
-                    }
+                while (num > 0) {
+                    st.push(num % 2);
+                    num = num / 2;
                 }
 
                 while (!(st.isEmpty())) {
                     resultstr += st.pop().toString();
                 }
+                if (parts.length == 2) {
+                    Queue<Integer> queue = new LinkedList<>();
+                    resultstr += "00101110";
 
+                    String str = "0." + parts[1];
+                    num2 = Double.valueOf(str);
+                    String[] strbin = num2.toString().split("\\.");
+                    while (fl) {
 
+                        num2 = num2 * 2;
+                        strbin = num2.toString().split("\\.");
+                        st.push(Integer.parseInt(strbin[0]));
+                        str = "0." + strbin[1];
+                        num2 = Double.valueOf(str);
+                        count++;
+                        if (strbin[1].equals("0") || count == 10) {
+                            fl = false;
+                        }
+                    }
+                    while (!st.isEmpty()) {
+                        queue.add(st.pop());
+                    }
+                    while (!queue.isEmpty()) {
+                        st.add(queue.remove());
+                    }
+                    while (!(st.isEmpty())) {
+                        resultstr += st.pop().toString();
+                    }
+
+                }
+                res.add((T) resultstr);
+                resultstr = "";
+            } catch (NumberFormatException e) {
+                res.add((T) "0");
             }
-            res.add((T) resultstr);
-            resultstr = "";
         }
         return res;
     }
