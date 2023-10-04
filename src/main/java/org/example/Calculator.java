@@ -32,6 +32,7 @@ public class Calculator {
 
     public <T> AbstractList<T> bin(List<T> list) {
         String resultstr = "";
+
         ArrayList<T> res = new ArrayList<>();
         for (T number : list) {
             String[] parts = number.toString().split("\\.");
